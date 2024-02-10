@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 
-import { Spinner } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
@@ -14,6 +13,7 @@ const Favourites = () => {
 
   const favourites = useSelector((state) => state.favourites.favourites);
 
+  // TODO: Implement logic to retrieve favourites later.
   useEffect(() => {
     dispatch(initializeCountries());
   }, [dispatch]);
@@ -37,7 +37,7 @@ const Favourites = () => {
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{country.name.common}</Card.Title>
                 <Card.Subtitle className="mb-5 text-muted">
-                {country.name.official}
+                  {country.name.official}
                 </Card.Subtitle>
                 <ListGroup
                   variant="flush"
@@ -49,10 +49,12 @@ const Favourites = () => {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <i className="bi bi-cash-coin me-2"></i>
-                    {Object.values(country.currencies || {}).map((currency) => currency.name).join(", ")}
+                    {Object.values(country.currencies || {})
+                      .map((currency) => currency.name)
+                      .join(", ")}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                   {country.population.toLocaleString()}
+                    {country.population.toLocaleString()}
                   </ListGroup.Item>
                 </ListGroup>
               </Card.Body>
