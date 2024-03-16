@@ -7,6 +7,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeCountries } from "../store/countriesSlice";
+import { removeFromFavourites } from "../store/favouritesSlice";
 
 const Favourites = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,12 @@ const Favourites = () => {
   useEffect(() => {
     dispatch(initializeCountries());
   }, [dispatch]);
+
+  const removeFromFavouritesHandler = (countryName) => {
+    console.log("Removing from favourites:", countryName);
+    dispatch(removeFromFavourites(countryName));
+    console.log("New favourites:", favourites); // Check if favourites array is updated
+  };
 
   return (
     <Container fluid>
@@ -57,6 +64,11 @@ const Favourites = () => {
                     {country.population.toLocaleString()}
                   </ListGroup.Item>
                 </ListGroup>
+                <button
+                  className="btn btn-danger mt-auto"
+                  onClick={() => removeFromFavouritesHandler(country.name.common)}>
+                  Remove from Favourites
+                </button>
               </Card.Body>
             </Card>
           </Col>
