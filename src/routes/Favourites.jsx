@@ -51,18 +51,23 @@ const Favourites = () => {
                   className="flex-grow-1 justify-content-end"
                 >
                   <ListGroup.Item>
-                    <i className="bi bi-translate me-2"></i>
+                    <i className="bi bi-translate me-2">Language:</i>
                     {Object.values(country.languages ?? {}).join(", ")}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <i className="bi bi-cash-coin me-2"></i>
+                    <i className="bi bi-cash-coin me-2">Currency:</i>
                     {Object.values(country.currencies || {})
                       .map((currency) => currency.name)
                       .join(", ")}
                   </ListGroup.Item>
                   <ListGroup.Item>
+                  <i className="bi bi-people me-2">Population:</i>
                     {country.population.toLocaleString()}
                   </ListGroup.Item>
+                  <ListGroup.Item>
+                      <i className="bi bi-people me-2">Area:</i>
+                      {country.area.toLocaleString()}
+                    </ListGroup.Item>
                 </ListGroup>
                 <button
                   className="btn btn-danger mt-auto"

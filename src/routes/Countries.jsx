@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Form, Spinner } from "react-bootstrap";
+import { Form, Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { initializeCountries } from "../store/countriesSlice";
 import { addFavourite } from "../store/favouritesSlice";
+import "../index.css";
 
 const Countries = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const Countries = () => {
   const countriesList = useSelector((state) => state.countries.countries);
   const loading = useSelector((state) => state.countries.isLoading);
   const [search, setSearch] = useState("");
+  const [addedToFavourites, setAddedToFavourites] = useState("");
 
   useEffect(() => {
     dispatch(initializeCountries());
@@ -42,6 +44,14 @@ const Countries = () => {
     );
   }
 
+  const handleAddToFavourites = (country) => {
+    dispatch(addFavourite(country));
+    setAddedToFavourites(country);
+    setTimeout(() => {
+      setAddedToFavourites("");
+    }, 2000); 
+  };
+
   return (
     <Container fluid>
       <Row>
@@ -62,9 +72,6 @@ const Countries = () => {
           .map((country) => (
             <Col className="mt-5" key={country.name.common}>
               <Card className="h-100">
-                <FavoriteIcon
-                  onClick={() => dispatch(addFavourite(country))}
-                ></FavoriteIcon>
                 <Link
                   to={`/countries/${country.name.common}`}
                   state={{ country: country }}
@@ -90,20 +97,37 @@ const Countries = () => {
                     className="flex-grow-1 justify-content-end"
                   >
                     <ListGroup.Item>
-                      <i className="bi bi-translate me-2"></i>
+                      <i className="bi bi-translate me-2">Languages:</i>
                       {Object.values(country.languages ?? {}).join(", ")}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <i className="bi bi-cash-coin me-2"></i>
+                      <i className="bi bi-cash-coin me-2">Currency:</i>
                       {Object.values(country.currencies || {})
                         .map((currency) => currency.name)
                         .join(", ")}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <i className="bi bi-people me-2"></i>
+                      <i className="bi bi-people me-2">Population:</i>
                       {country.population.toLocaleString()}
                     </ListGroup.Item>
+                    <ListGroup.Item>
+                      <i className="bi bi-people me-2">Area:</i>
+                      {country.area.toLocaleString()}
+                    </ListGroup.Item>
                   </ListGroup>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>Add to Favourites</Tooltip>}>
+                      <FavoriteIcon 
+                        className="favourite-icon" 
+                        onClick={() => handleAddToFavourites(country)} 
+                      />
+                  </OverlayTrigger>
+                  {addedToFavourites === country && (
+                    <div className="added-to-favourites-message">
+                      {`${country.name.common} added to Favourites...`}
+                    </div>
+                  )}
                 </Card.Body>
               </Card>
             </Col>
