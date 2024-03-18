@@ -8,6 +8,7 @@ import Row from "react-bootstrap/Row";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import { auth, db, logout } from "../auth/firebase";
+import "../index.css";
 
 const Header = () => {
   const [user] = useAuthState(auth);
@@ -32,7 +33,7 @@ const Header = () => {
   return (
     <Container fluid>
       <Row>
-        <Navbar bg="light" variant="light">
+      <Navbar style={{ textAlign: "center"}} bg="light" variant="light" expand={window.innerWidth <= 200 ? "lg" : "md"}>
           <Container className="justify-content-end">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

@@ -23,28 +23,28 @@ const Register = () => {
   }, [user, loading]);
 
   return (
-    <div>
+    <div style={{margin: "20px"}}>
       <h1>Register</h1>
       <p>Please log in or register to continue</p>
-      <input
+      <input style={{margin: "2px"}}
         type="text"
         value={name}
         placeholder="Full Name"
         onChange={(e) => setName(e.target.value)}
       />
-      <input
+      <input style={{margin: "2px"}}
         type="text"
         value={email}
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
       />
-      <input
+      <input style={{margin: "2px"}}
         type="password"
         value={password}
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button onClick={register}>Register</Button>
+      <Button style={{margin: "2px"}} onClick={register}>Register</Button>
     </div>
   );
 };

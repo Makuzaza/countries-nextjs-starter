@@ -21,22 +21,22 @@ const Login = () => {
   }, [user, loading]);
 
   return (
-    <div>
+    <div style={{margin: "20px"}}>
       <h1>Login</h1>
       <p>Please log in or register to continue</p>
-      <input
+      <input style={{margin: "2px"}}
         type="text"
         value={email}
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
       />
-      <input
+      <input style={{margin: "2px"}}
         type="password"
         value={password}
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button onClick={login}>Login</Button>
+      <Button style={{margin: "2px"}} onClick={login}>Login</Button>
     </div>
   );
 };

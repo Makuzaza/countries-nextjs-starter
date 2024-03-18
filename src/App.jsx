@@ -61,49 +61,6 @@ function App() {
       </LocalizationProvider>
     </Provider>
     );
-
-  // const router = createBrowserRouter([
-  //   {
-  //     path: "/",
-  //     element: <Root />,
-  //     children: [
-  //       {
-  //         path: "/",
-  //         element: <Home />,
-  //       },
-  //       {
-  //         path: "/countries",
-  //         element: <Countries />,
-  //       },
-  //       {
-  //         path: "countries/:single",
-  //         element: <CountriesSingle />,
-  //       },
-  //       {
-  //         path: "/favourites",
-  //         element: <Favourites />,
-  //       },
-  //       {
-  //         path: "/register",
-  //         element: <Register />,
-  //       },
-  //       {
-  //         path: "/login",
-  //         element: <Login />,
-  //       },
-  //     ],
-  //   },
-  // ]);
-
-  // return (
-  //   <Provider store={store}>
-  //     <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //       <ThemeProvider theme={theme}>
-  //         <RouterProvider router={router}></RouterProvider>
-  //       </ThemeProvider>
-  //     </LocalizationProvider>
-  //   </Provider>
-  // );
 }
 
 export default App;
