@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Form, Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
@@ -9,25 +10,24 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getFavouritesFromSource } from "../auth/firebase";
 import { initializeCountries } from "../store/countriesSlice";
-import { addFavourite } from "../store/favouritesSlice";
-import "../index.css";
+import { addFavourite, removeFavourite } from "../store/favouritesSlice";
 
 const Countries = () => {
   const dispatch = useDispatch();
 
   const countriesList = useSelector((state) => state.countries.countries);
+  const favourites = useSelector((state) => state.favourites.favourites);
   const loading = useSelector((state) => state.countries.isLoading);
   const [search, setSearch] = useState("");
-  const [addedToFavourites, setAddedToFavourites] = useState("");
 
   useEffect(() => {
     dispatch(initializeCountries());
+    dispatch(getFavouritesFromSource());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log("search: ", search);
-  }, [search]);
+  useEffect(() => {}, [search]);
 
   if (loading) {
     return (
@@ -44,19 +44,11 @@ const Countries = () => {
     );
   }
 
-  const handleAddToFavourites = (country) => {
-    dispatch(addFavourite(country));
-    setAddedToFavourites(country);
-    setTimeout(() => {
-      setAddedToFavourites("");
-    }, 2000); 
-  };
-
   return (
     <Container fluid>
       <Row>
         <Form.Control
-          style={{ width: "18rem" }}
+          style={{ width: "18rem", marginLeft: "20px", marginTop: "20px"}}
           type="search"
           className="me-2 "
           placeholder="Search for countries"
@@ -72,6 +64,7 @@ const Countries = () => {
           .map((country) => (
             <Col className="mt-5" key={country.name.common}>
               <Card className="h-100">
+               
                 <Link
                   to={`/countries/${country.name.common}`}
                   state={{ country: country }}
@@ -97,17 +90,17 @@ const Countries = () => {
                     className="flex-grow-1 justify-content-end"
                   >
                     <ListGroup.Item>
-                      <i className="bi bi-translate me-2">Languages:</i>
+                      <i className="bi bi-translate me-2">Languages: </i>
                       {Object.values(country.languages ?? {}).join(", ")}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <i className="bi bi-cash-coin me-2">Currency:</i>
+                      <i className="bi bi-cash-coin me-2">Currency: </i>
                       {Object.values(country.currencies || {})
                         .map((currency) => currency.name)
                         .join(", ")}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <i className="bi bi-people me-2">Population:</i>
+                      <i className="bi bi-people me-2">Population: </i>
                       {country.population.toLocaleString()}
                     </ListGroup.Item>
                     <ListGroup.Item>
@@ -115,19 +108,28 @@ const Countries = () => {
                       {country.area.toLocaleString()}
                     </ListGroup.Item>
                   </ListGroup>
+                  {favourites.some(
+                  (favourite) => favourite === country.name?.common
+                ) ? (
                   <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>Add to Favourites</Tooltip>}>
-                      <FavoriteIcon 
-                        className="favourite-icon" 
-                        onClick={() => handleAddToFavourites(country)} 
-                      />
+                  placement="top"
+                  overlay={<Tooltip>Remove from Favourites</Tooltip>}>
+                  <FavoriteBorderIcon
+                    onClick={() =>
+                      dispatch(removeFavourite(country.name.common))
+                    } style={{ color: 'red' }}
+                  />
+                    </OverlayTrigger>
+                ) : (
+                  <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>Add to Favourites</Tooltip>}>
+                  <FavoriteIcon
+                    onClick={() => dispatch(addFavourite(country.name.common))}
+                  />
                   </OverlayTrigger>
-                  {addedToFavourites === country && (
-                    <div className="added-to-favourites-message">
-                      {`${country.name.common} added to Favourites...`}
-                    </div>
-                  )}
+
+                )}
                 </Card.Body>
               </Card>
             </Col>

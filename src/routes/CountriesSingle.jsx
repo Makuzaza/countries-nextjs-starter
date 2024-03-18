@@ -31,6 +31,39 @@ const CountriesSingle = () => {
     fetchData();
   }, [country.capital]);
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAds8lxAuoSad_M-RQc9Hd2xa7Y7yk8nwM&libraries=places&callback=initMap`;
+    script.defer = true;
+
+    window.initMap = loadMap; // Assign loadMap to window.initMap
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [country.capital]);
+
+  const loadMap = () => {
+    const mapElement = document.getElementById("map");
+    if (!mapElement) {
+      console.error("Map element not found");
+      return;
+    }
+
+    const map = new window.google.maps.Map(mapElement, {
+      center: { lat: country.latlng[0], lng: country.latlng[1] },
+      zoom: 10,
+    });
+
+    new window.google.maps.Marker({
+      position: { lat: country.latlng[0], lng: country.latlng[1] },
+      map,
+      title: country.capital,
+    });
+  };
+
   if (loading) {
     return (
       <Col className="text-center m-5">
@@ -44,7 +77,7 @@ const CountriesSingle = () => {
       <Container>
         <Row className="m-5">
           <Col>
-          <Image thumbnail src={`https://source.unsplash.com/featured/500x300/?${country.name.official}`} />
+            <Image thumbnail src={`https://source.unsplash.com/featured/500x300/?${country.name.official}`} />
           </Col>
           <Col>
             <h2 className="display-4">{country.common}</h2>
@@ -61,11 +94,12 @@ const CountriesSingle = () => {
                 />
               </div>
             )}
+               <div id="map" style={{ height: "400px", width: "100%" }}></div>
           </Col>
         </Row>
         <Row>
           <Col>
-            <Button variant="light" onClick={() => navigate("/countries")}>
+            <Button style={{ margin: "10px" }} onClick={() => navigate("/countries")}>
               Back to Countries
             </Button>
           </Col>

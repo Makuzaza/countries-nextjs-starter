@@ -23,6 +23,7 @@ const Login = () => {
   return (
     <div>
       <h1>Login</h1>
+      <p>Please log in or register to continue</p>
       <input
         type="text"
         value={email}

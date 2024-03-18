@@ -1,34 +1,41 @@
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useEffect } from "react";
-
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import { useDispatch, useSelector } from "react-redux";
+import { getFavouritesFromSource } from "../auth/firebase";
 import { initializeCountries } from "../store/countriesSlice";
-import { removeFromFavourites } from "../store/favouritesSlice";
+import { addFavourite, removeFavourite } from "../store/favouritesSlice";
+import "../index.css";
 
 const Favourites = () => {
   const dispatch = useDispatch();
 
   const favourites = useSelector((state) => state.favourites.favourites);
+  let countriesList = useSelector((state) => state.countries.countries);
 
-  // TODO: Implement logic to retrieve favourites later.
+  if (favourites.length > 0) {
+    countriesList = countriesList.filter((country) =>
+      favourites.includes(country.name.common)
+    );
+  } else {
+    countriesList = [];
+  }
+
   useEffect(() => {
     dispatch(initializeCountries());
+    dispatch(getFavouritesFromSource());
   }, [dispatch]);
-
-  const removeFromFavouritesHandler = (countryName) => {
-    console.log("Removing from favourites:", countryName);
-    dispatch(removeFromFavourites(countryName));
-    console.log("New favourites:", favourites); // Check if favourites array is updated
-  };
 
   return (
     <Container fluid>
       <Row xs={2} md={3} lg={4} className=" g-3">
-        {favourites.map((country) => (
+        {countriesList.map((country) => (
           <Col key={country.name.official} className="mt-5">
             <Card className="h-100">
               <Card.Img
@@ -51,11 +58,11 @@ const Favourites = () => {
                   className="flex-grow-1 justify-content-end"
                 >
                   <ListGroup.Item>
-                    <i className="bi bi-translate me-2">Language:</i>
+                    <i className="bi bi-translate me-2">Languages: </i>
                     {Object.values(country.languages ?? {}).join(", ")}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <i className="bi bi-cash-coin me-2">Currency:</i>
+                    <i className="bi bi-cash-coin me-2">Currency: </i>
                     {Object.values(country.currencies || {})
                       .map((currency) => currency.name)
                       .join(", ")}
@@ -69,11 +76,28 @@ const Favourites = () => {
                       {country.area.toLocaleString()}
                     </ListGroup.Item>
                 </ListGroup>
-                <button
-                  className="btn btn-danger mt-auto"
-                  onClick={() => removeFromFavouritesHandler(country.name.common)}>
-                  Remove from Favourites
-                </button>
+                {favourites.some(
+                  (favourite) => favourite === country.name?.common
+                ) ? (
+                  <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>Remove from Favourites</Tooltip>}>
+                  <FavoriteBorderIcon 
+                    onClick={() =>
+                      dispatch(removeFavourite(country.name.common))
+                    } style={{ color: 'red' }}
+                  />
+                    </OverlayTrigger>
+                ) : (
+                  <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>Add to Favourites</Tooltip>}>
+                  <FavoriteIcon 
+                    onClick={() => dispatch(addFavourite(country.name.common))}
+                  />
+                  </OverlayTrigger>
+
+                )}
               </Card.Body>
             </Card>
           </Col>

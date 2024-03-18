@@ -25,6 +25,7 @@ const Register = () => {
   return (
     <div>
       <h1>Register</h1>
+      <p>Please log in or register to continue</p>
       <input
         type="text"
         value={name}

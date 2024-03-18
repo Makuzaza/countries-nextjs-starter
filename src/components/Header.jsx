@@ -1,22 +1,33 @@
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Row from "react-bootstrap/Row";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { logout, auth } from "../auth/firebase";
-import React, { useState, useEffect } from 'react';
+import { auth, db, logout } from "../auth/firebase";
 
 const Header = () => {
-  const [user, setUser] = useState(null);
+  const [user] = useAuthState(auth);
+
+  const [name, setName] = useState();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
+    const getUserData = async () => {
+      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const name = doc.data().name;
+        setName(name);
+      });
+    };
 
-    return unsubscribe;
-  }, []);
+    if (user) {
+      getUserData();
+    }
+  }, [user]);
 
   return (
     <Container fluid>
@@ -25,7 +36,8 @@ const Header = () => {
           <Container className="justify-content-end">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Nav>
+              <Nav style={{ gap: "10px", alignItems: "center"}}
+              >
                 <Link to="/">
                   <Button variant="contained">Home</Button>
                 </Link>
@@ -35,9 +47,10 @@ const Header = () => {
                 <Link to="/favourites">
                   <Button variant="contained">Favourites</Button>
                 </Link>
-                   {user ? (
+                   { user ? (
                   <>
-                    <span>Hello {user.email}</span>
+                    <span style={{margin: "10px"}}>Hello, {user.email}</span>
+                
                     <Button onClick={logout}>Logout</Button>
                   </>
                 ) : (
