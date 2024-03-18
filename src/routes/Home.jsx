@@ -20,14 +20,12 @@ const Home = () => {
 <li>React Router Dom: Facilitates seamless navigation between different pages of the application, ensuring a smooth user experience.</li>
 
 <li>React Redux and React Redux Toolkit: Powering state management, React Redux and Redux Toolkit efficiently manage application data, enhancing scalability and maintainability.</li>
-<li>Firebase Authentication: Provides robust authentication services, enabling secure user sign-in and access control.
-Bootstrap or MUI: Leveraging Bootstrap or Material-UI for responsive and visually appealing user interface components, ensuring a modern and intuitive design.</li>
+<li>Firebase Authentication: Provides robust authentication services, enabling secure user sign-in and access control.</li>
+<li>Bootstrap or MUI: Leveraging Bootstrap or Material-UI for responsive and visually appealing user interface components, ensuring a modern and intuitive design.</li>
 <p></p>
 <h2>Get Started:</h2>
 
 <p>Begin your journey of exploration with the Countries App. Sign in to unlock personalized features, browse through a diverse collection of countries, and start building your list of favorites. Whether you're a travel enthusiast, a student of geography, or simply curious about the world, the Countries App offers a captivating and enriching experience for all.</p>
-
-
     </div>
   );
 };
