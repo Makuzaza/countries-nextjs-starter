@@ -24,10 +24,22 @@ const CountriesSingle = () => {
           `https://api.openweathermap.org/data/2.5/weather?q=${country.capital}&units=metric&appid=a0e29bae5005e3e8cf1a0b229bf6cdff`
         );
         setWeather(response.data);
-        // Set the map center to the country's capital
+   
+        const countryResponse = await axios.get(
+          `https://restcountries.com/v3.1/all`
+        );
+
+        const selectedCountryData = countryResponse.data.find(
+          item => item.name.common === country.name.common
+        );
+
+        const capitalLatLng = selectedCountryData.capitalInfo.latlng;
+
         setMapCenter({
-          lat: response.data.coord.lat,
-          lng: response.data.coord.lon
+          lat: capitalLatLng[0],
+          lng: capitalLatLng[1],
+          city: country.capital,
+          country: country.name.common
         });
       } catch (error) {
         console.error(error);
@@ -38,7 +50,7 @@ const CountriesSingle = () => {
     };
 
     fetchData();
-  }, [country.capital]);
+  }, [country.capital, country.name.common]);
 
   if (loading) {
     return (
@@ -77,6 +89,7 @@ const CountriesSingle = () => {
                   src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
                   alt={weather.weather[0].description}
                 />
+       
               </div>
             )}
           </Col>
