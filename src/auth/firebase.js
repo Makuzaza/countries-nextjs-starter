@@ -19,14 +19,14 @@ import { getFavourites } from "../store/favouritesSlice";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBkR_mAA1BCaceThL4UAbqcRe2zMox92FM",
-    authDomain: "my-register-22059.firebaseapp.com",
-    projectId: "my-register-22059",
-    storageBucket: "my-register-22059.appspot.com",
-    messagingSenderId: "951338305202",
-    appId: "1:951338305202:web:23887ea2264bff4c61abab",
-    measurementId: "G-T364JMJ17J"
-  };
+  apiKey: import.meta.env.VITE_FIREBASE_KEY,
+  authDomain: "my-register-22059.firebaseapp.com",
+  projectId: "my-register-22059",
+  storageBucket: "my-register-22059.appspot.com",
+  messagingSenderId: "951338305202",
+  appId: "1:951338305202:web:23887ea2264bff4c61abab",
+  measurementId: "G-T364JMJ17J"
+};
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);

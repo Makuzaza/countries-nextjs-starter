@@ -98,7 +98,7 @@ const CountriesSingle = () => {
         <Row>
           <Col>
           <LoadScript
-            googleMapsApiKey="AIzaSyAds8lxAuoSad_M-RQc9Hd2xa7Y7yk8nwM"
+             googleMapsApiKey={import.meta.env.GOOGLE_MAPS_API_KEY}
             libraries={libraries} >
               <GoogleMap
                 zoom={10}
